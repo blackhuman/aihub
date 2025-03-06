@@ -8,9 +8,11 @@ export const POST = async (request: Request) => {
   if (!apiKey) return new Response("No API key provided", { status: 401 });
   const { messages } = await request.json();
 
-  return streamText({
+  const result = streamText({
     model: openai("gpt-4o"),
     messages: convertToCoreMessages(messages),
     abortSignal: request.signal,
   })
+
+  return result.toDataStreamResponse();
 }
