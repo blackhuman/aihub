@@ -58,7 +58,9 @@ export async function POST(req: Request) {
   // const mergedMessages = [...previousMessages, ...messages];
 
   console.log('request messages:', messages)
-  const lastSuggestionMessage = messages.findLast(message => message.role === 'user' && message.metadata?.suggestion)
+  const userMessages = messages.filter(message => message.role === 'user')
+  const lastUserMessage = userMessages.length > 0 ? userMessages[userMessages.length - 1] : null
+  const lastSuggestionMessage = lastUserMessage?.metadata?.suggestion ? lastUserMessage : null
   // @ts-ignore
   const lastSuggestion: string = lastSuggestionMessage?.parts[0].text
 
