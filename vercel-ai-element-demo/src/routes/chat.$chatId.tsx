@@ -73,7 +73,8 @@ export const Route = createFileRoute('/chat/$chatId')({
   },
 })
 
-const baseUrl = 'http://localhost:3000'
+// const baseUrl = 'http://localhost:3000'
+const baseUrl = 'https://aihub-beta.vercel.app'
 
 export const PhraseEvent = z.object({
   phrase: z.string(),
