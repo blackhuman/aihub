@@ -3,6 +3,7 @@ import { Redis } from '@upstash/redis';
 import { streamText, UIMessage, convertToModelMessages, createUIMessageStream, createUIMessageStreamResponse, Tool, ToolSet, createIdGenerator, generateObject } from 'ai';
 import z from 'zod'
 import { gateway } from '@ai-sdk/gateway';
+import { auth, currentUser } from '@clerk/nextjs/server'
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -37,7 +38,6 @@ export async function GET(req: Request) {
   const id = new URL(req.url).searchParams.get('id')
   console.log('request chat id:', id)
   const messages = await redis.get<UIMessage[]>(`chat-${id}`) ?? [];
-  console.log('messages', messages)
   return Response.json({ messages });
 }
 
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
   // const previousMessages = await redis.get<UIMessage[]>(`chat-${id}`) ?? [];
   // const mergedMessages = [...previousMessages, ...messages];
 
-  console.log('request messages:', messages)
+  console.log('request messages from user:', messages)
   const userMessages = messages.filter(message => message.role === 'user')
   const lastUserMessage = userMessages.length > 0 ? userMessages[userMessages.length - 1] : null
   const lastSuggestionMessage = lastUserMessage?.metadata?.suggestion ? lastUserMessage : null
