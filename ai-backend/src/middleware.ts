@@ -34,5 +34,5 @@ export default clerkMiddleware(async (auth, req) => {
     // auth.protect()
   }
 }, {
-  debug: true
+  debug: false
 });
